@@ -70,7 +70,7 @@
             android:layout_height="@dimen/timelineSize"
             android:layout_margin="8dp"
             android:background="@color/white"
-            android:padding="8dp"
+            android:paddingBottom="4dp"
             app:hAlign="center"
             app:vAlign="bottom" />
 
@@ -86,7 +86,7 @@
             android:layout_height="@dimen/timelineSize"
             android:layout_margin="8dp"
             android:background="@color/white"
-            android:padding="8dp"
+            android:paddingTop="12dp"
             app:hAlign="end"
             app:vAlign="top" />
 
@@ -104,10 +104,11 @@
             android:layout_height="@dimen/timelineSize"
             android:layout_margin="8dp"
             android:background="@color/white"
-            app:hAlign="end"
-            app:vAlign="bottom"
+            android:paddingBottom="10dp"
+            android:paddingEnd="20dp"
             android:paddingRight="20dp"
-            android:paddingBottom="10dp"/>
+            app:hAlign="end"
+            app:vAlign="bottom" />
 
     </LinearLayout>
 </LinearLayout>
