@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
+import android.os.Build
 import android.util.AttributeSet
 import android.view.ViewGroup
 
@@ -65,14 +66,17 @@ class TimelineView @JvmOverloads constructor(
         val centerX = rect.centerX()
         val centerY = rect.centerY()
 
+        val canvasPaddingStart = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) paddingStart else paddingLeft
+        val canvasPaddingEnd = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) paddingEnd else paddingRight
+
         val x = when (hAlign) {
-            H_ALIGN_START -> ((centerY.toFloat()) / 3)
-            H_ALIGN_END -> centerY + ((centerY.toFloat()) / 3) * 2
+            H_ALIGN_START -> ((centerY.toFloat()) / 3) + if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) paddingStart else paddingLeft
+            H_ALIGN_END -> centerY + ((centerY.toFloat()) / 3) * 2 - if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) paddingEnd else paddingRight
             else -> centerX.toFloat()
         }
         val y = when (vAlign) {
-            V_ALIGN_TOP -> ((centerX.toFloat()) / 3)
-            V_ALIGN_BOTTOM -> centerX + ((centerX.toFloat()) / 3) * 2
+            V_ALIGN_TOP -> ((centerX.toFloat()) / 3) + paddingTop
+            V_ALIGN_BOTTOM -> centerX + ((centerX.toFloat()) / 3) * 2 - paddingBottom
             else -> centerY.toFloat()
         }.toFloat()
 
@@ -82,16 +86,16 @@ class TimelineView @JvmOverloads constructor(
         val top = 0f
         val bottom = rect.bottom.toFloat()
 
-        canvas.drawLine(((centerX.toFloat()) / 3), top, ((centerX.toFloat()) / 3), bottom, linesPaint)
+        canvas.drawLine(((centerX.toFloat()) / 3) + canvasPaddingStart, top, ((centerX.toFloat()) / 3) + canvasPaddingStart, bottom, linesPaint)
         canvas.drawLine(centerX.toFloat(), top, centerX.toFloat(), bottom, linesPaint)
-        canvas.drawLine(centerX + ((centerX.toFloat()) / 3) * 2, top, centerX + ((centerX.toFloat()) / 3) * 2, bottom, linesPaint)
+        canvas.drawLine(centerX + ((centerX.toFloat()) / 3) * 2 - canvasPaddingEnd, top, centerX + ((centerX.toFloat()) / 3) * 2 - canvasPaddingEnd, bottom, linesPaint)
 
         // H lines
         val left = 0f
         val right = rect.right.toFloat()
-        canvas.drawLine(left, ((centerY.toFloat()) / 3), right, ((centerY.toFloat()) / 3), linesPaint)
+        canvas.drawLine(left, ((centerY.toFloat()) / 3) + paddingTop, right, ((centerY.toFloat()) / 3) + paddingTop, linesPaint)
         canvas.drawLine(left, centerY.toFloat(), right, centerY.toFloat(), linesPaint)
-        canvas.drawLine(left, centerY + ((centerY.toFloat()) / 3) * 2, right, centerY + ((centerY.toFloat()) / 3) * 2, linesPaint)
+        canvas.drawLine(left, centerY + ((centerY.toFloat()) / 3) * 2 - paddingBottom, right, centerY + ((centerY.toFloat()) / 3) * 2 - paddingBottom, linesPaint)
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {

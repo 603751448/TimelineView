@@ -18,6 +18,7 @@
             android:layout_height="@dimen/timelineSize"
             android:layout_margin="8dp"
             android:background="@color/white"
+            android:padding="8dp"
             app:hAlign="start"
             app:vAlign="top" />
 
@@ -26,6 +27,7 @@
             android:layout_height="@dimen/timelineSize"
             android:layout_margin="8dp"
             android:background="@color/white"
+            android:padding="4dp"
             app:hAlign="start"
             app:vAlign="center" />
 
@@ -34,6 +36,7 @@
             android:layout_height="@dimen/timelineSize"
             android:layout_margin="8dp"
             android:background="@color/white"
+            android:padding="16dp"
             app:hAlign="start"
             app:vAlign="bottom" />
 
@@ -49,6 +52,7 @@
             android:layout_height="@dimen/timelineSize"
             android:layout_margin="8dp"
             android:background="@color/white"
+            android:padding="8dp"
             app:hAlign="center"
             app:vAlign="top" />
 
@@ -57,6 +61,7 @@
             android:layout_height="@dimen/timelineSize"
             android:layout_margin="8dp"
             android:background="@color/white"
+            android:padding="8dp"
             app:hAlign="center"
             app:vAlign="center" />
 
@@ -65,6 +70,7 @@
             android:layout_height="@dimen/timelineSize"
             android:layout_margin="8dp"
             android:background="@color/white"
+            android:padding="8dp"
             app:hAlign="center"
             app:vAlign="bottom" />
 
@@ -80,6 +86,7 @@
             android:layout_height="@dimen/timelineSize"
             android:layout_margin="8dp"
             android:background="@color/white"
+            android:padding="8dp"
             app:hAlign="end"
             app:vAlign="top" />
 
@@ -88,6 +95,7 @@
             android:layout_height="@dimen/timelineSize"
             android:layout_margin="8dp"
             android:background="@color/white"
+            android:padding="8dp"
             app:hAlign="end"
             app:vAlign="center" />
 
@@ -97,7 +105,9 @@
             android:layout_margin="8dp"
             android:background="@color/white"
             app:hAlign="end"
-            app:vAlign="bottom" />
+            app:vAlign="bottom"
+            android:paddingRight="20dp"
+            android:paddingBottom="10dp"/>
 
     </LinearLayout>
 </LinearLayout>
