@@ -20,7 +20,14 @@
             android:background="@color/white"
             android:padding="8dp"
             app:hAlign="start"
-            app:vAlign="top" />
+            app:vAlign="top">
+            
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@color/colorPrimary" />
+
+        </com.alorma.timeline.TimelineView>
 
         <com.alorma.timeline.TimelineView
             android:layout_width="@dimen/timelineSize"

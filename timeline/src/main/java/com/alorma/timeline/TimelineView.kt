@@ -8,6 +8,8 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.os.Build
 import android.util.AttributeSet
+import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 
 class TimelineView @JvmOverloads constructor(
@@ -30,27 +32,31 @@ class TimelineView @JvmOverloads constructor(
         private const val H_ALIGN_DEFAULT: Int = H_ALIGN_CENTER
     }
 
+    private val rect = Rect()
+
     private val paint = Paint().apply {
         isAntiAlias = true
         color = Color.BLUE
     }
 
-    private val linesPaint = Paint().apply {
-        isAntiAlias = true
-        color = Color.RED
-        strokeWidth = 1f
-    }
-
-    private val rect = Rect()
-
     private val vAlign: Int
     private val hAlign: Int
 
+    private var internalView: View? = null
+
+    private val canvasDispatcherList: List<CanvasDispatcher>
+
     init {
+        canvasDispatcherList = listOf(LinesCanvasDispatcher())
+
         val typedArray: TypedArray = getTypedArray(context, attrs, defStyleAttr)
 
         vAlign = typedArray.getInt(R.styleable.TimelineView_vAlign, V_ALIGN_DEFAULT)
-        hAlign = typedArray.getInt(R.styleable.TimelineView_hAlign, V_ALIGN_DEFAULT)
+        hAlign = typedArray.getInt(R.styleable.TimelineView_hAlign, H_ALIGN_DEFAULT)
+
+        canvasDispatcherList.forEach {
+            it.init()
+        }
     }
 
     private fun getTypedArray(context: Context, attrs: AttributeSet?, defStyle: Int): TypedArray {
@@ -66,9 +72,6 @@ class TimelineView @JvmOverloads constructor(
         val centerX = rect.centerX()
         val centerY = rect.centerY()
 
-        val canvasPaddingStart = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) paddingStart else paddingLeft
-        val canvasPaddingEnd = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) paddingEnd else paddingRight
-
         val x = when (hAlign) {
             H_ALIGN_START -> ((centerY.toFloat()) / 3) + if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) paddingStart else paddingLeft
             H_ALIGN_END -> centerY + ((centerY.toFloat()) / 3) * 2 - if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) paddingEnd else paddingRight
@@ -82,20 +85,17 @@ class TimelineView @JvmOverloads constructor(
 
         canvas.drawCircle(x, y, (CIRCLE_SIZE / 2).toFloat(), paint)
 
-        // V lines
-        val top = 0f
-        val bottom = rect.bottom.toFloat()
+        canvasDispatcherList.forEach {
+            it.drawCanvas(canvas, this)
+        }
+    }
 
-        canvas.drawLine(((centerX.toFloat()) / 3) + canvasPaddingStart, top, ((centerX.toFloat()) / 3) + canvasPaddingStart, bottom, linesPaint)
-        canvas.drawLine(centerX.toFloat(), top, centerX.toFloat(), bottom, linesPaint)
-        canvas.drawLine(centerX + ((centerX.toFloat()) / 3) * 2 - canvasPaddingEnd, top, centerX + ((centerX.toFloat()) / 3) * 2 - canvasPaddingEnd, bottom, linesPaint)
 
-        // H lines
-        val left = 0f
-        val right = rect.right.toFloat()
-        canvas.drawLine(left, ((centerY.toFloat()) / 3) + paddingTop, right, ((centerY.toFloat()) / 3) + paddingTop, linesPaint)
-        canvas.drawLine(left, centerY.toFloat(), right, centerY.toFloat(), linesPaint)
-        canvas.drawLine(left, centerY + ((centerY.toFloat()) / 3) * 2 - paddingBottom, right, centerY + ((centerY.toFloat()) / 3) * 2 - paddingBottom, linesPaint)
+    override fun addView(child: View?, params: LayoutParams?) {
+        if (internalView == null) {
+            super.addView(child, params)
+            internalView = child
+        }
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
